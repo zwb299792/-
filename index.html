@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 
 <head>
   <meta charset="UTF-8">
-  <title>❤</title>
+  <title>💗</title>
   <style>
     body {
       margin: 0;
@@ -17,12 +17,23 @@
     canvas {
       display: block;
     }
+
+    /* 播放条固定在顶部居中 */
+    audio#bgm {
+      position: fixed;
+      top: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+    }
+
   </style>
 </head>
 
 <body>
   <canvas id="canvas" width="640" height="480"></canvas>
   <script src="heart.js"></script>
+  <audio id="bgm" src="bg_music.mp3" controls autoplay loop></audio>
 </body>
 
 </html>

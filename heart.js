@@ -8,6 +8,10 @@ const TEXT = "LOVE";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+
+
+
+
 // =============== 数学辅助函数 ===============
 function heart_function(t, shrink_ratio) {
   const x = 16 * Math.pow(Math.sin(t), 3);
@@ -132,39 +136,51 @@ class Heart {
     }
 
     // 文字点
-    // const text = new Text();
-    // for (const [x, y] of text.points) {
-    //   const [nx, ny] = update_heart_point(x, y, 0);
-    //   all_points.push([nx, ny, 2]);
-    // }
+    for (const [x, y] of TEXT_POINTS) {
+      const [nx, ny] = update_heart_point(x, y, 0);
+      all_points.push([nx, ny, 2]);
+    }
 
     this.frame_points[frame] = all_points;
   }
 }
 
 
+// =============== 导入文字 ===============
+let TEXT_POINTS = [];
+
+fetch("text_points.json")
+  .then(res => res.json())
+  .then(data => {
+    TEXT_POINTS = data;
+    startAnimation(); // 在 JSON 加载完成后再启动动画
+  });
+
+
 // =============== 绘制函数 ===============
-const heart = new Heart();
-let frame = 0;
+function startAnimation() {
+  const heart = new Heart();
+  let frame = 0;
 
-function draw() {
-  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  function draw() {
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  // 颜色渐变
-  const beat_phase = Math.abs(Math.sin(frame / 20));
-  const r = 255;
-  const g = Math.floor(50 + 100 * beat_phase);
-  const b = Math.floor(30 + 150 * beat_phase);
-  const color = `rgb(${r},${g},${b})`;
-  ctx.fillStyle = color;
+    // 颜色渐变
+    const beat_phase = Math.abs(Math.sin(frame / 20));
+    const r = 255;
+    const g = Math.floor(50 + 100 * beat_phase);
+    const b = Math.floor(30 + 150 * beat_phase);
+    const color = `rgb(${r},${g},${b})`;
+    ctx.fillStyle = color;
 
-  // 绘制当前帧的爱心点阵
-  for (const [x, y, size] of heart.frame_points[frame % heart.total_frames]) {
-    ctx.fillRect(x, y, size, size);
+    // 绘制当前帧的爱心点阵
+    for (const [x, y, size] of heart.frame_points[frame % heart.total_frames]) {
+      ctx.fillRect(x, y, size, size);
+    }
+
+    frame++;
+    setTimeout(() => {requestAnimationFrame(draw);}, 160);
   }
 
-  frame++;
-  setTimeout(() => {requestAnimationFrame(draw);}, 160);
+  draw();
 }
-
-draw();
