@@ -9,9 +9,6 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 
-
-
-
 // =============== 数学辅助函数 ===============
 function heart_function(t, shrink_ratio) {
   const x = 16 * Math.pow(Math.sin(t), 3);
